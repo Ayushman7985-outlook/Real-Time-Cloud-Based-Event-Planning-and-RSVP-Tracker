@@ -1902,3 +1902,86 @@ button {
     font-size: 26px;
   }
 }
+.announcement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.announcement-form input,
+.announcement-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dce2eb;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  background: #ffffff;
+}
+
+.announcement-form input:focus,
+.announcement-form textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+.announcement-form textarea {
+  resize: vertical;
+}
+
+.announcement-form button {
+  width: fit-content;
+}
+
+/* User role badge */
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border: 1px solid #dbe4f0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.announcement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.announcement-form input,
+.announcement-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dce2eb;
+  border-radius: 10px;
+  outline: none;
+  background: #ffffff;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.announcement-form input:focus,
+.announcement-form textarea:focus {
+  border-color: #6366f1;
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+.announcement-form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.announcement-form button {
+  width: fit-content;
+}

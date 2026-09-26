@@ -25,6 +25,7 @@ import {
   subscribeToAnnouncements,
   subscribeToEventAttendees,
   updateCheckIn,
+  createAnnouncement,
 } from "../services/firebaseService";
 
 export default function EventDetails() {
@@ -39,6 +40,9 @@ export default function EventDetails() {
 
   const [qrCode, setQrCode] = useState("");
   const [copied, setCopied] = useState(false);
+
+  const [announcementTitle, setAnnouncementTitle] = useState("");
+const [announcementMessage, setAnnouncementMessage] = useState("");
 
   useEffect(() => {
     let unsubscribeEvent = () => {};
@@ -439,7 +443,9 @@ export default function EventDetails() {
             </div>
 
             {/* ANNOUNCEMENTS */}
-
+        {isOrganizer && (
+          
+        
             <div className="event-details-card announcement-section">
               <div className="section-title-row">
                 <h2>
@@ -483,6 +489,7 @@ export default function EventDetails() {
                 </div>
               )}
             </div>
+            )}
 
             {/* CHECK-IN */}
 
@@ -568,7 +575,94 @@ export default function EventDetails() {
                 )}
               </div>
             )}
-          </section>
+          </section>{/* ANNOUNCEMENTS */}
+          
+<div className="event-details-card announcement-section">
+  <div className="section-title-row">
+    <div>
+      <h2>Announcements</h2>
+      <p className="card-subtitle">
+        Keep attendees updated with important event information.
+      </p>
+    </div>
+
+    <Megaphone size={19} />
+  </div>
+
+  {isOrganizer && (
+    <form
+      className="announcement-form"
+      onSubmit={async (e) => {
+        e.preventDefault();
+
+        if (!announcementTitle.trim() || !announcementMessage.trim()) {
+          return;
+        }
+
+        try {
+          await createAnnouncement({
+            eventId: event.id,
+            title: announcementTitle.trim(),
+            message: announcementMessage.trim(),
+          });
+
+          setAnnouncementTitle("");
+          setAnnouncementMessage("");
+        } catch (error) {
+          console.error(
+            "Announcement creation error:",
+            error
+          );
+        }
+      }}
+    >
+      <input
+        type="text"
+        placeholder="Announcement title"
+        value={announcementTitle}
+        onChange={(e) =>
+          setAnnouncementTitle(e.target.value)
+        }
+      />
+
+      <textarea
+        placeholder="Write an announcement for attendees..."
+        rows="3"
+        value={announcementMessage}
+        onChange={(e) =>
+          setAnnouncementMessage(e.target.value)
+        }
+      />
+
+      <button
+        type="submit"
+        className="primary-button"
+      >
+        <Megaphone size={17} />
+        Publish Announcement
+      </button>
+    </form>
+  )}
+
+  {announcements.length === 0 ? (
+    <div className="announcement-empty">
+      <p>No announcements yet.</p>
+    </div>
+  ) : (
+    <div className="announcement-list">
+      {announcements.map((announcement) => (
+        <div
+          className="announcement"
+          key={announcement.id}
+        >
+          <h3>{announcement.title}</h3>
+
+          <p>{announcement.message}</p>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
           {/* LIVE SIDEBAR */}
 
