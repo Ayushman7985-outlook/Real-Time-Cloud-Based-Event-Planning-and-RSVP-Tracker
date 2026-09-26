@@ -28,7 +28,9 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Correct role mapping
   const isOrganizer = profile?.role === "organizer";
+  const isAttendee = profile?.role === "attendee";
 
   useEffect(() => {
     const eventsQuery = query(
@@ -84,7 +86,6 @@ export default function Dashboard() {
           onClick={() => navigate("/dashboard")}
         >
           <div className="brand-icon">✦</div>
-
           <span>Live Event Platform</span>
         </div>
 
@@ -133,9 +134,7 @@ export default function Dashboard() {
           {isOrganizer && (
             <button
               className="primary-button create-event-button"
-              onClick={() =>
-                navigate("/create-event")
-              }
+              onClick={() => navigate("/create-event")}
             >
               <Plus size={20} />
               Create Event
@@ -174,7 +173,6 @@ export default function Dashboard() {
           {loading && (
             <div className="empty-state">
               <div className="spinner"></div>
-
               <p>Loading events...</p>
             </div>
           )}
@@ -225,8 +223,7 @@ export default function Dashboard() {
                   >
                     <div className="event-card-top">
                       <span className="event-type">
-                        {event.eventType ||
-                          "Event"}
+                        {event.eventType || "Event"}
                       </span>
 
                       <span className="event-status">
@@ -255,7 +252,6 @@ export default function Dashboard() {
 
                         <span>
                           {event.startTime}
-
                           {event.endTime
                             ? ` - ${event.endTime}`
                             : ""}
@@ -264,7 +260,6 @@ export default function Dashboard() {
 
                       <div>
                         <MapPin size={17} />
-
                         <span>
                           {event.venue}
                         </span>
@@ -274,13 +269,8 @@ export default function Dashboard() {
                         <Users size={17} />
 
                         <span>
-                          {event.goingCount ||
-                            0}{" "}
-                          /{" "}
-                          {
-                            event.maximumCapacity
-                          }{" "}
-                          going
+                          {event.goingCount || 0} /{" "}
+                          {event.maximumCapacity} going
                         </span>
                       </div>
                     </div>

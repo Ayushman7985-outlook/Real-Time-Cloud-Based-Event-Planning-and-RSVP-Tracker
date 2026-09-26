@@ -9,6 +9,7 @@ import {
   query,
   runTransaction,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 import { db } from "../firebase";
@@ -19,6 +20,7 @@ import { db } from "../firebase";
 
 export async function getEvent(eventId) {
   const eventRef = doc(db, "events", eventId);
+
   const snapshot = await getDoc(eventRef);
 
   if (!snapshot.exists()) {
@@ -29,6 +31,15 @@ export async function getEvent(eventId) {
     id: snapshot.id,
     ...snapshot.data(),
   };
+}
+
+export async function updateEvent(eventId, updatedData) {
+  const eventRef = doc(db, "events", eventId);
+
+  await updateDoc(eventRef, {
+    ...updatedData,
+    updatedAt: serverTimestamp(),
+  });
 }
 
 /* =========================
@@ -64,6 +75,7 @@ export async function submitRSVP({
   status,
 }) {
   const eventRef = doc(db, "events", eventId);
+
   const rsvpRef = doc(
     db,
     "events",
@@ -108,7 +120,10 @@ export async function submitRSVP({
       const currentGoing = event.goingCount || 0;
       const capacity = event.maximumCapacity || 0;
 
-      if (currentGoing >= capacity && oldStatus !== "GOING") {
+      if (
+        currentGoing >= capacity &&
+        oldStatus !== "GOING"
+      ) {
         throw new Error(
           "This event is full. No more Going RSVPs are available."
         );
@@ -175,7 +190,11 @@ export function subscribeToEventRSVPs(
       callback(rsvps);
     },
     (error) => {
-      console.error("RSVP listener error:", error);
+      console.error(
+        "RSVP listener error:",
+        error
+      );
+
       callback([]);
     }
   );
@@ -205,7 +224,10 @@ export function subscribeToEvent(
       });
     },
     (error) => {
-      console.error("Event listener error:", error);
+      console.error(
+        "Event listener error:",
+        error
+      );
     }
   );
 }
@@ -272,6 +294,10 @@ export async function createAnnouncement({
   });
 }
 
+/* =========================
+   EVENT ATTENDEES
+========================= */
+
 export function subscribeToEventAttendees(
   eventId,
   callback
@@ -311,6 +337,10 @@ export function subscribeToEventAttendees(
   );
 }
 
+/* =========================
+   CHECK-IN
+========================= */
+
 export async function updateCheckIn({
   eventId,
   userId,
@@ -337,5 +367,28 @@ export async function updateCheckIn({
         ? serverTimestamp()
         : null,
     });
+  });
+}
+
+/* =========================
+   REMINDER
+========================= */
+
+export async function createReminder({
+  eventId,
+  message,
+}) {
+  const announcementsRef = collection(
+    db,
+    "events",
+    eventId,
+    "announcements"
+  );
+
+  await addDoc(announcementsRef, {
+    title: "Event Reminder",
+    message,
+    type: "REMINDER",
+    createdAt: serverTimestamp(),
   });
 }
