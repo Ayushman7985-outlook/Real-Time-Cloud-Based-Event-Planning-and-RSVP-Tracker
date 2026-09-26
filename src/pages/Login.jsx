@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CalendarDays, Lock, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarDays,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Sparkles,
+} from "lucide-react";
+
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -12,6 +21,7 @@ export default function Login() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -40,58 +50,169 @@ export default function Login() {
   };
 
   return (
-    <main className="auth-page">
-      <div className="auth-card">
-        <div className="brand-icon">
-          <CalendarDays size={28} />
-        </div>
-
-        <h1>Welcome back</h1>
-        <p className="auth-subtitle">
-          Sign in to manage your events and RSVPs.
-        </p>
-
-        {error && <div className="error-box">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="form-stack">
-          <label>
-            Email
-            <div className="input-wrapper">
-              <Mail size={18} />
-              <input
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
+    <main className="auth-modern-page">
+      <div className="auth-modern-shell">
+        <section className="auth-brand-panel">
+          <div className="auth-brand-top">
+            <div className="auth-brand-mark">
+              <CalendarDays size={21} />
             </div>
-          </label>
 
-          <label>
-            Password
-            <div className="input-wrapper">
-              <Lock size={18} />
-              <input
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
+            <span>Live Event Platform</span>
+          </div>
+
+          <div className="auth-brand-content">
+            <div className="auth-pill">
+              <Sparkles size={14} />
+              Real-time event management
             </div>
-          </label>
 
-          <button className="primary-button" disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
+            <h2>
+              Bring every event
+              <span> to life.</span>
+            </h2>
 
-        <p className="auth-footer">
-          Don't have an account? <Link to="/register">Create one</Link>
-        </p>
+            <p>
+              Create events, collect RSVPs, manage capacity and
+              keep your attendees connected in real time.
+            </p>
+
+            <div className="auth-feature-list">
+              <div>
+                <span className="auth-feature-dot"></span>
+                Live RSVP tracking
+              </div>
+
+              <div>
+                <span className="auth-feature-dot"></span>
+                QR-based invitations
+              </div>
+
+              <div>
+                <span className="auth-feature-dot"></span>
+                Real-time attendee check-in
+              </div>
+            </div>
+          </div>
+
+          <div className="auth-brand-footer">
+            Cloud-powered event management
+          </div>
+        </section>
+
+        <section className="auth-modern-card">
+          <div className="auth-modern-heading">
+            <div className="auth-mobile-logo">
+              <CalendarDays size={22} />
+            </div>
+
+            <p className="auth-modern-kicker">WELCOME BACK</p>
+
+            <h1>Sign in to your account</h1>
+
+            <p>
+              Manage your events and stay connected with your
+              attendees.
+            </p>
+          </div>
+
+          {error && (
+            <div className="auth-modern-error">
+              {error}
+            </div>
+          )}
+
+          <form
+            onSubmit={handleSubmit}
+            className="auth-modern-form"
+          >
+            <div className="auth-field">
+              <label htmlFor="login-email">Email address</label>
+
+              <div className="auth-input">
+                <Mail size={18} />
+
+                <input
+                  id="login-email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <div className="auth-label-row">
+                <label htmlFor="login-password">
+                  Password
+                </label>
+              </div>
+
+              <div className="auth-input">
+                <Lock size={18} />
+
+                <input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter your password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() =>
+                    setShowPassword(!showPassword)
+                  }
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="auth-submit-button"
+              disabled={loading}
+            >
+              {loading ? (
+                "Signing in..."
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="auth-modern-divider">
+            <span>OR</span>
+          </div>
+
+          <p className="auth-modern-footer">
+            New to Live Event Platform?
+            <Link to="/register">
+              Create an account
+              <ArrowRight size={15} />
+            </Link>
+          </p>
+        </section>
       </div>
     </main>
   );
